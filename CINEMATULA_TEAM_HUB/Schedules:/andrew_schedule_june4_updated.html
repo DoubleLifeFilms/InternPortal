@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrew's Schedule - June 4, 2025</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 2.2em;
+        }
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin: 10px 0 0 0;
+        }
+        .celebration-banner {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .independence-banner {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .section {
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #667eea;
+        }
+        .section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.4em;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-list li {
+            background: white;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid #3498db;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .task-list li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        .task-list li::before {
+            content: "☐";
+            position: absolute;
+            left: -25px;
+            font-size: 1.2em;
+            color: #3498db;
+        }
+        .task-completed::before {
+            content: "✅";
+            color: #27ae60 !important;
+        }
+        .task-completed {
+            background: #d5f5d5 !important;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .priority-critical {
+            border-left-color: #e74c3c !important;
+            background: #fff5f5;
+        }
+        .priority-critical::before {
+            color: #e74c3c !important;
+        }
+        .independence-task {
+            border-left-color: #f39c12 !important;
+            background: #fef9e7;
+        }
+        .independence-task::before {
+            color: #f39c12 !important;
+        }
+        .time-estimate {
+            float: right;
+            background: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Andrew's Mission Schedule</h1>
+            <div class="subtitle">Wednesday, June 4, 2025 • Archival Portal Launch + Independent Work</div>
+        </div>
+
+        <div class="celebration-banner">
+            🎉 CELEBRATION: Amazing work on Texas.film with Netlify + GitHub! 🎉
+        </div>
+
+        <div class="independence-banner">
+            🚀 INDEPENDENCE TEST: 1:45-4:15 PM - Prove you can work solo while Thaddeus is out!
+        </div>
+
+        <div class="section">
+            <h2>📊 Daily Progress</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <p id="progressText">0% Complete - Ready to launch the archival portal!</p>
+        </div>
+
+        <div class="section">
+            <h2>🌅 Team Meeting & Morning Setup</h2>
+            <ul class="task-list">
+                <li class="priority-critical" data-time="45">
+                    Team Meeting (9:30-10:15): Celebrate wins, discuss learnings, plan execution
+                    <span class="time-estimate">45 min</span>
+                </li>
+                <li class="priority-critical" data-time="30">
+                    IMMEDIATE: Deploy all HTML schedules + workflows to Netlify for team access
+                    <span class="time-estimate">30 min</span>
+                </li>
+                <li class="priority-critical" data-time="30">
+                    Watch Thaddeus demo Gemini API setup with GPT export
+                    <span class="time-estimate">30 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🔥 Knowledge Repository Setup</h2>
+            <ul class="task-list">
+                <li class="priority-critical" data-time="45">
+                    Export ALL your GPT conversations (Settings → Data Export)
+                    <span class="time-estimate">45 min</span>
+                </li>
+                <li class="priority-critical" data-time="60">
+                    Import GPT conversations into Gemini API knowledge repository
+                    <span class="time-estimate">60 min</span>
+                </li>
+                <li class="priority-critical" data-time="15">
+                    Test repository with sample project queries
+                    <span class="time-estimate">15 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🗄️ MISSION CRITICAL: Archival Portal</h2>
+            <ul class="task-list">
+                <li class="priority-critical" data-time="30">
+                    Decision confirmed: Gemini + Google Workspace integration
+                    <span class="time-estimate">30 min</span>
+                </li>
+                <li class="priority-critical" data-time="45">
+                    Set up AWS S3 as backup/download system for 4K assets
+                    <span class="time-estimate">45 min</span>
+                </li>
+                <li class="priority-critical" data-time="60">
+                    Build beautiful HTML interface for asset downloads by scene
+                    <span class="time-estimate">60 min</span>
+                </li>
+                <li class="priority-critical" data-time="30">
+                    Test upload/download workflow with sample assets
+                    <span class="time-estimate">30 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🚀 INDEPENDENT WORK (1:45-4:15 PM)</h2>
+            <p><strong>Thaddeus is out - this is your time to shine!</strong></p>
+            <ul class="task-list">
+                <li class="independence-task" data-time="90">
+                    Complete archival portal - make it LIVE and functional
+                    <span class="time-estimate">90 min</span>
+                </li>
+                <li class="independence-task" data-time="45">
+                    Research podcast sponsorships for film industry content
+                    <span class="time-estimate">45 min</span>
+                </li>
+                <li class="independence-task" data-time="30">
+                    Research website advertising options for texas.film
+                    <span class="time-estimate">30 min</span>
+                </li>
+                <li class="independence-task" data-time="15">
+                    Populate more data into your GPT knowledge repository
+                    <span class="time-estimate">15 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🌐 Website Strategy Discussion</h2>
+            <ul class="task-list">
+                <li data-time="20">
+                    Present case for Netlify vs API-managed websites
+                    <span class="time-estimate">20 min</span>
+                </li>
+                <li data-time="25">
+                    Show Texas.film site you built - get feedback and notes
+                    <span class="time-estimate">25 min</span>
+                </li>
+                <li data-time="30">
+                    Plan thaddeus.film deployment using your Netlify expertise
+                    <span class="time-estimate">30 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🤝 Team Collaboration</h2>
+            <ul class="task-list">
+                <li data-time="15">
+                    Support Anthony with Google Sheets API questions
+                    <span class="time-estimate">15 min</span>
+                </li>
+                <li data-time="20">
+                    Coordinate on office/podcast space conversion research
+                    <span class="time-estimate">20 min</span>
+                </li>
+                <li data-time="10">
+                    Share cable management research findings
+                    <span class="time-estimate">10 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Success Demo (4:15 PM)</h2>
+            <ul class="task-list">
+                <li class="priority-critical" data-time="20">
+                    Demo live archival portal - show upload/download functionality
+                    <span class="time-estimate">20 min</span>
+                </li>
+                <li data-time="15">
+                    Present sponsorship and advertising research findings
+                    <span class="time-estimate">15 min</span>
+                </li>
+                <li data-time="10">
+                    Show off knowledge repository capabilities
+                    <span class="time-estimate">10 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>💪 Your Strengths Today</h2>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 10px; background: #e8f5e8; margin: 5px 0; border-radius: 5px;">
+                    ✅ <strong>Netlify Expertise:</strong> You proved you can deploy complex sites
+                </li>
+                <li style="padding: 10px; background: #e8f5e8; margin: 5px 0; border-radius: 5px;">
+                    ✅ <strong>Business Mindset:</strong> Perfect for investor research and monetization
+                </li>
+                <li style="padding: 10px; background: #e8f5e8; margin: 5px 0; border-radius: 5px;">
+                    ✅ <strong>Technical Growth:</strong> Ready for AWS integration and API work
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const tasks = document.querySelectorAll('.task-list li');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        
+        let completedTasks = 0;
+        const totalTasks = tasks.length;
+        
+        tasks.forEach(task => {
+            task.addEventListener('click', function() {
+                if (!this.classList.contains('task-completed')) {
+                    this.classList.add('task-completed');
+                    completedTasks++;
+                } else {
+                    this.classList.remove('task-completed');
+                    completedTasks--;
+                }
+                updateProgress();
+            });
+        });
+        
+        function updateProgress() {
+            const percentage = Math.round((completedTasks / totalTasks) * 100);
+            progressBar.style.width = percentage + '%';
+            progressText.textContent = `${percentage}% Complete - ${completedTasks}/${totalTasks} tasks done`;
+            
+            if (percentage === 100) {
+                progressText.textContent = "🎉 ARCHIVAL PORTAL MASTER! Ready for demo! 🚀";
+            }
+        }
+    </script>
+</body>
+</html>

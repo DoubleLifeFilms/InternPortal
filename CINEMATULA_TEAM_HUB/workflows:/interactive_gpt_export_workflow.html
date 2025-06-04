@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT Export & Import Workflow</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #27ae60;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 2.2em;
+        }
+        .progress-section {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 12px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: white;
+            width: 0%;
+            border-radius: 12px;
+            transition: width 0.5s ease;
+        }
+        .step {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #ecf0f1;
+            transition: all 0.3s ease;
+        }
+        .step.active {
+            border-left-color: #27ae60;
+            background: #e8f5e8;
+        }
+        .step.completed {
+            border-left-color: #2ecc71;
+            background: #d4edda;
+        }
+        .step h3 {
+            color: #2c3e50;
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .step-number {
+            background: #ecf0f1;
+            color: #7f8c8d;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .step.active .step-number {
+            background: #27ae60;
+            color: white;
+        }
+        .step.completed .step-number {
+            background: #2ecc71;
+            color: white;
+        }
+        .step-content {
+            margin-left: 40px;
+        }
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .checklist li:hover {
+            background: rgba(39, 174, 96, 0.1);
+            border-radius: 5px;
+            padding-left: 10px;
+        }
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #bdc3c7;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .checkbox.checked {
+            background: #27ae60;
+            border-color: #27ae60;
+            color: white;
+        }
+        .link-button {
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .link-button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #856404;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #155724;
+        }
+        .next-step-button {
+            background: #27ae60;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        .next-step-button:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+        .next-step-button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>GPT Export & Import Workflow</h1>
+            <p>Export your ChatGPT conversations and create a Gemini knowledge repository</p>
+        </div>
+
+        <div class="progress-section">
+            <h3>📊 Workflow Progress</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <p id="progressText">0% Complete - Ready to start!</p>
+        </div>
+
+        <div class="step active" id="step1">
+            <h3>
+                <span class="step-number">1</span>
+                Export ChatGPT Conversations
+            </h3>
+            <div class="step-content">
+                <p>First, we need to export all your ChatGPT conversation history.</p>
+                
+                <ul class="checklist">
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Go to <a href="https://chat.openai.com" target="_blank" class="link-button">ChatGPT</a>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Click your profile picture (top right corner)
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Select "Settings & Beta"
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Click "Data Controls" in the left sidebar
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Click "Export Data"
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Click "Confirm Export"
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Wait for email confirmation (10-30 minutes)
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Download ZIP file from email link
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Extract ZIP and locate conversations.json file
+                    </li>
+                </ul>
+
+                <div class="warning">
+                    ⚠️ The export can take 10-30 minutes. You can continue with other tasks while waiting for the email.
+                </div>
+
+                <button class="next-step-button" onclick="nextStep()" id="step1-next" disabled>
+                    Continue to Gemini Setup →
+                </button>
+            </div>
+        </div>
+
+        <div class="step" id="step2">
+            <h3>
+                <span class="step-number">2</span>
+                Set Up Gemini API Access
+            </h3>
+            <div class="step-content">
+                <p>Create your Gemini API account and get your API key.</p>
+                
+                <ul class="checklist">
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Go to <a href="https://aistudio.google.com" target="_blank" class="link-button">Google AI Studio</a>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Sign in with your Google account
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Click "Get API Key" button
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Create new project or select existing one
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Copy your API key to a safe place
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Start a new conversation in the Gemini interface
+                    </li>
+                </ul>
+
+                <div class="success">
+                    ✅ Save your API key securely - you'll need it for future projects!
+                </div>
+
+                <button class="next-step-button" onclick="nextStep()" id="step2-next" disabled>
+                    Continue to Data Import →
+                </button>
+            </div>
+        </div>
+
+        <div class="step" id="step3">
+            <h3>
+                <span class="step-number">3</span>
+                Import Data to Gemini
+            </h3>
+            <div class="step-content">
+                <p>Import your ChatGPT conversations into Gemini to create your knowledge repository.</p>
+                
+                <ul class="checklist">
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Open your downloaded conversations.json file
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Copy text from recent conversations (start with most important)
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        In Gemini, start with this prompt: "Creating GPT knowledge repository..."
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Paste conversation chunks (don't overload - use batches)
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Ask Gemini to summarize what it received
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Continue importing more conversation batches
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Test with sample queries about your projects
+                    </li>
+                </ul>
+
+                <div class="warning">
+                    💡 Pro Tip: Import in chronological order and ask Gemini to create an index of topics and projects as you go.
+                </div>
+
+                <button class="next-step-button" onclick="nextStep()" id="step3-next" disabled>
+                    Test Repository →
+                </button>
+            </div>
+        </div>
+
+        <div class="step" id="step4">
+            <h3>
+                <span class="step-number">4</span>
+                Test Your Knowledge Repository
+            </h3>
+            <div class="step-content">
+                <p>Verify your knowledge repository is working correctly.</p>
+                
+                <ul class="checklist">
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Ask: "What projects can you identify in this data?"
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Ask: "Find information about [specific project name]"
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Ask: "What decisions have I made about [topic]?"
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Ask: "Create an index of all available information"
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Save the conversation URL/ID for future access
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <span class="checkbox"></span>
+                        Document successful queries for team reference
+                    </li>
+                </ul>
+
+                <div class="success">
+                    🎉 Congratulations! Your GPT knowledge repository is now live and searchable!
+                </div>
+
+                <button class="next-step-button" onclick="completeWorkflow()" id="step4-next" disabled>
+                    Mark Complete ✅
+                </button>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="workflows-hub.html" class="link-button">← Back to Workflows Hub</a>
+            <a href="andrew-schedule.html" class="link-button">View Andrew's Schedule</a>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let totalSteps = 4;
+        let completedChecks = {1: 0, 2: 0, 3: 0, 4: 0};
+        let totalChecks = {1: 9, 2: 6, 3: 7, 4: 6};
+
+        function toggleCheck(element) {
+            const checkbox = element.querySelector('.checkbox');
+            const step = getCurrentStepFromElement(element);
+            
+            if (checkbox.classList.contains('checked')) {
+                checkbox.classList.remove('checked');
+                checkbox.textContent = '';
+                completedChecks[step]--;
+            } else {
+                checkbox.classList.add('checked');
+                checkbox.textContent = '✓';
+                completedChecks[step]++;
+            }
+            
+            updateStepProgress(step);
+            updateOverallProgress();
+        }
+
+        function getCurrentStepFromElement(element) {
+            const stepElement = element.closest('.step');
+            return parseInt(stepElement.id.replace('step', ''));
+        }
+
+        function updateStepProgress(step) {
+            const completed = completedChecks[step];
+            const total = totalChecks[step];
+            const button = document.getElementById(`step${step}-next`);
+            
+            if (completed === total) {
+                button.disabled = false;
+                button.textContent = button.textContent.replace('Continue to', 'Ready to Continue to');
+            } else {
+                button.disabled = true;
+                button.textContent = button.textContent.replace('Ready to Continue to', 'Continue to');
+            }
+        }
+
+        function updateOverallProgress() {
+            const totalCompleted = Object.values(completedChecks).reduce((a, b) => a + b, 0);
+            const totalPossible = Object.values(totalChecks).reduce((a, b) => a + b, 0);
+            const percentage = Math.round((totalCompleted / totalPossible) * 100);
+            
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = 
+                `${percentage}% Complete - ${totalCompleted}/${totalPossible} tasks done`;
+        }
+
+        function nextStep() {
+            const currentStepElement = document.getElementById(`step${currentStep}`);
+            currentStepElement.classList.remove('active');
+            currentStepElement.classList.add('completed');
+            
+            currentStep++;
+            
+            if (currentStep <= totalSteps) {
+                const nextStepElement = document.getElementById(`step${currentStep}`);
+                nextStepElement.classList.add('active');
+            }
+        }
+
+        function completeWorkflow() {
+            const currentStepElement = document.getElementById(`step${currentStep}`);
+            currentStepElement.classList.remove('active');
+            currentStepElement.classList.add('completed');
+            
+            document.getElementById('progressText').textContent = 
+                '🎉 Workflow Complete! GPT Knowledge Repository is live!';
+                
+            // Could save completion status to localStorage here
+            alert('Congratulations! Your GPT knowledge repository is ready to use.');
+        }
+    </script>
+</body>
+</html>

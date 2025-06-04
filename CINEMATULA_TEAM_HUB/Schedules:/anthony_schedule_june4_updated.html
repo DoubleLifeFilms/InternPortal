@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anthony's Schedule - June 4, 2025</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #764ba2;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 2.2em;
+        }
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin: 10px 0 0 0;
+        }
+        .independence-banner {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .focus-banner {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .section {
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #764ba2;
+        }
+        .section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.4em;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-list li {
+            background: white;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid #9b59b6;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .task-list li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        .task-list li::before {
+            content: "☐";
+            position: absolute;
+            left: -25px;
+            font-size: 1.2em;
+            color: #9b59b6;
+        }
+        .task-completed::before {
+            content: "✅";
+            color: #27ae60 !important;
+        }
+        .task-completed {
+            background: #d5f5d5 !important;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .priority-critical {
+            border-left-color: #e74c3c !important;
+            background: #fff5f5;
+        }
+        .priority-critical::before {
+            color: #e74c3c !important;
+        }
+        .independence-task {
+            border-left-color: #f39c12 !important;
+            background: #fef9e7;
+        }
+        .independence-task::before {
+            color: #f39c12 !important;
+        }
+        .creative-task {
+            border-left-color: #16a085 !important;
+            background: #e8f8f5;
+        }
+        .creative-task::before {
+            color: #16a085 !important;
+        }
+        .time-estimate {
+            float: right;
+            background: #9b59b6;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #9b59b6, #2ecc71);
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Anthony's Portal Mission</h1>
+            <div class="subtitle">Wednesday, June 4, 2025 • Intern Portal Launch + Knowledge Systems</div>
+        </div>
+
+        <div class="focus-banner">
+            🎯 YOUR SPECIALTY: Detail-oriented systems and beautiful interfaces!
+        </div>
+
+        <div class="independence-banner">
+            🚀 INDEPENDENCE TEST: 1:45-4:15 PM - Build the intern portal while Thaddeus is out!
+        </div>
+
+        <div class="section">
+            <h2>📊 Daily Progress</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <p id="progressText">0% Complete - Ready to build the intern portal!</p>
+        </div>
+
+        <div class="section">
+            <h2>🌅 Team Meeting & Morning Setup</h2>
+            <ul class="task-list">
+                <li class="priority-critical" data-time="45">
+                    Team Meeting (9:30-10:15): Share learnings, discuss portal strategy
+                    <span class="time-estimate">45 min</span>
+                </li>
+                <li class="priority-critical" data-time="25">
+                    Export Claude conversations (Settings → Export conversations)
+                    <span class="time-estimate">25 min</span>
+                </li>
+                <li class="priority-critical" data-time="30">
+                    Export Gemini conversations via Google Takeout
+                    <span class="time-estimate">30 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🔥 Knowledge Repository & Portal Start</h2>
+            <ul class="task-list">
+                <li class="priority-critical" data-time="60">
+                    Import Claude + Gemini data into separate Gemini API repository
+                    <span class="time-estimate">60 min</span>
+                </li>
+                <li class="priority-critical" data-time="15">
+                    Test repository with project-specific queries
+                    <span class="time-estimate">15 min</span>
+                </li>
+                <li class="priority-critical" data-time="45">
+                    Create master Google Sheet for 5-intern tracking system
+                    <span class="time-estimate">45 min</span>
+                </li>
+            </ul>
+        </div>
+                <li class="priority-critical" data-time="75">
+                    Build beautiful HTML interface using Google Sheets API
+                    <span class="time-estimate">75 min</span>
+                </li>
+                <li class="priority-critical" data-time="30">
+                    Style to match yesterday's gorgeous schedule design
+                    <span class="time-estimate">30 min</span>
+                </li>
+                <li class="priority-critical" data-time="25">
+                    Add real-time task tracking and progress bars
+                    <span class="time-estimate">25 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🚀 INDEPENDENT WORK (1:45-4:15 PM)</h2>
+            <p><strong>Thaddeus is out - time to prove your portal-building skills!</strong></p>
+            <ul class="task-list">
+                <li class="independence-task" data-time="90">
+                    Complete intern portal - make it LIVE and functional for 5 interns
+                    <span class="time-estimate">90 min</span>
+                </li>
+                <li class="independence-task" data-time="30">
+                    Add PWA features for mobile access (Add to Home Screen)
+                    <span class="time-estimate">30 min</span>
+                </li>
+                <li class="independence-task" data-time="45">
+                    Research podcast sponsorships and monetization strategies
+                    <span class="time-estimate">45 min</span>
+                </li>
+                <li class="independence-task" data-time="15">
+                    Test portal on iPhone Safari and optimize
+                    <span class="time-estimate">15 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🎨 Creative Portal Features</h2>
+            <ul class="task-list">
+                <li class="creative-task" data-time="20">
+                    Add daily schedule generation from Google Sheet data
+                    <span class="time-estimate">20 min</span>
+                </li>
+                <li class="creative-task" data-time="25">
+                    Create task completion animations and visual feedback
+                    <span class="time-estimate">25 min</span>
+                </li>
+                <li class="creative-task" data-time="15">
+                    Add color-coding for different intern specialties
+                    <span class="time-estimate">15 min</span>
+                </li>
+                <li class="creative-task" data-time="20">
+                    Build offline functionality for basic task viewing
+                    <span class="time-estimate">20 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🏗️ Office/Podcast Conversion Research</h2>
+            <ul class="task-list">
+                <li data-time="30">
+                    Research cable management solutions for office setup
+                    <span class="time-estimate">30 min</span>
+                </li>
+                <li data-time="25">
+                    Find iPad apps for room design and layout planning
+                    <span class="time-estimate">25 min</span>
+                </li>
+                <li data-time="20">
+                    Research convertible office/podcast studio solutions
+                    <span class="time-estimate">20 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🤝 Team Integration</h2>
+            <ul class="task-list">
+                <li data-time="15">
+                    Help Andrew with Google Workspace integration questions
+                    <span class="time-estimate">15 min</span>
+                </li>
+                <li data-time="20">
+                    Connect intern portal to archival portal for workflow integration
+                    <span class="time-estimate">20 min</span>
+                </li>
+                <li data-time="10">
+                    Share office conversion research with Andrew
+                    <span class="time-estimate">10 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Success Demo (4:15 PM)</h2>
+            <ul class="task-list">
+                <li class="priority-critical" data-time="20">
+                    Demo live intern portal - show 5-intern tracking system
+                    <span class="time-estimate">20 min</span>
+                </li>
+                <li data-time="10">
+                    Show mobile PWA features working on iPhone
+                    <span class="time-estimate">10 min</span>
+                </li>
+                <li data-time="15">
+                    Present office conversion research and recommendations
+                    <span class="time-estimate">15 min</span>
+                </li>
+                <li data-time="10">
+                    Demo knowledge repository search capabilities
+                    <span class="time-estimate">10 min</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>💪 Your Unique Strengths</h2>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 10px; background: #f0e6ff; margin: 5px 0; border-radius: 5px;">
+                    ✅ <strong>Detail Focus:</strong> Perfect for building comprehensive systems
+                </li>
+                <li style="padding: 10px; background: #f0e6ff; margin: 5px 0; border-radius: 5px;">
+                    ✅ <strong>Visual Design:</strong> You understand what makes interfaces beautiful
+                </li>
+                <li style="padding: 10px; background: #f0e6ff; margin: 5px 0; border-radius: 5px;">
+                    ✅ <strong>Technical Interest:</strong> You enjoy diving deep into how things work
+                </li>
+                <li style="padding: 10px; background: #f0e6ff; margin: 5px 0; border-radius: 5px;">
+                    ✅ <strong>Returning Intern:</strong> You know the workflow needs better than anyone
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const tasks = document.querySelectorAll('.task-list li');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        
+        let completedTasks = 0;
+        const totalTasks = tasks.length;
+        
+        tasks.forEach(task => {
+            task.addEventListener('click', function() {
+                if (!this.classList.contains('task-completed')) {
+                    this.classList.add('task-completed');
+                    completedTasks++;
+                } else {
+                    this.classList.remove('task-completed');
+                    completedTasks--;
+                }
+                updateProgress();
+            });
+        });
+        
+        function updateProgress() {
+            const percentage = Math.round((completedTasks / totalTasks) * 100);
+            progressBar.style.width = percentage + '%';
+            progressText.textContent = `${percentage}% Complete - ${completedTasks}/${totalTasks} tasks done`;
+            
+            if (percentage === 100) {
+                progressText.textContent = "🎉 INTERN PORTAL ARCHITECT! System complete! 🚀";
+            }
+        }
+    </script>
+</body>
+</html>
