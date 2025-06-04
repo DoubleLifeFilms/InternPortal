@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intern Portal</title>
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --card-dark: #1e1e1e;
+            --text-light: #e0e0e0;
+            --text-muted: #aaaaaa;
+            --accent-color: #3a86ff;
+            --border-color: #333333;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+        .sidebar {
+            background-color: #111111;
+            color: var(--text-light);
+            padding: 20px;
+            border-right: 1px solid var(--border-color);
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .card {
+            background: var(--card-dark);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+        h1, h2, h3 {
+            color: var(--text-light);
+            margin-top: 0;
+        }
+        .task {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+        .task:hover {
+            background-color: #252525;
+        }
+        .task:last-child {
+            border-bottom: none;
+        }
+        .task-checkbox {
+            margin-right: 15px;
+            margin-top: 3px;
+        }
+        .task-content {
+            flex-grow: 1;
+        }
+        .task-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        .task-description {
+            font-size: 0.9em;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        .task-meta {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            display: flex;
+            gap: 15px;
+        }
+        .task-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        button, .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button:hover, .btn:hover {
+            opacity: 0.9;
+        }
+        button.secondary {
+            background-color: #333;
+        }
+        button.danger {
+            background-color: #ff3a3a;
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #252525;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            color: var(--text-light);
+        }
+        .nav-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .nav-item:hover {
+            background-color: #252525;
+        }
+        .active {
+            background-color: var(--accent-color);
+        }
+        .editable {
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .editable:focus {
+            outline: 1px solid var(--accent-color);
+            background-color: #252525;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Intern Portal</h2>
+            <div class="nav-item active">Dashboard</div>
+            <div class="nav-item">Task Board</div>
+            <div class="nav-item">Lunch Orders</div>
+            <div class="nav-item">Calendar</div>
+            <div class="nav-item">Intern Directory</div>
+        </div>
+        
+        <div class="main-content">
+            <h1>Intern Dashboard</h1>
+            
+            <!-- Announcements Panel -->
+            <div class="card">
+                <h2>Announcements</h2>
+                <p><strong>Today's Meeting:</strong> Team sync at 10:30 AM in Conference Room B</p>
+                <p><strong>Reminder:</strong> Timesheets due by Friday EOD</p>
+                <button class="secondary">Edit Announcements (Admin Only)</button>
+            </div>
+            
+            <!-- Task Board -->
+            <div class="card">
+                <h2>Task Board</h2>
+                <div class="task-actions">
+                    <input type="text" id="new-task-title" placeholder="New task title...">
+                    <button id="add-task">Add Task</button>
+                </div>
+                
+                <div class="task-list" id="task-list">
+                    <!-- Tasks will be added here dynamically -->
+                </div>
+            </div>
+            
+            <!-- Lunch Orders -->
+            <div class="card">
+                <h2>Lunch Orders</h2>
+                <p>Today's date: <span id="current-date">June 4, 2025</span></p>
+                <textarea rows="8" id="lunch-orders" placeholder="Type your name and lunch order here..."></textarea>
+                <div>
+                    <button id="update-order">Update Order</button>
+                    <button id="finalize-order" class="secondary">Finalize Order (Admin)</button>
+                    <button id="reset-orders" class="danger">Reset for New Day</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Task management functionality
+        const taskList = document.getElementById('task-list');
+        const newTaskTitle = document.getElementById('new-task-title');
+        const addTaskBtn = document.getElementById('add-task');
+        
+        // Sample tasks data
+        let tasks = [
+            {
+                id: 1,
+                title: 'Complete project proposal draft',
+                description: 'Include timeline, budget, and team requirements',
+                dueDate: 'June 10',
+                assignedTo: 'Alex, Jamie',
+                completed: false
+            },
+            {
+                id: 2,
+                title: 'Research competitors',
+                description: 'Find 5 main competitors and analyze their offerings',
+                dueDate: 'June 5',
+                assignedTo: 'Taylor',
+                completed: true
+            }
+        ];
+        
+        // Render tasks
+        function renderTasks() {
+            taskList.innerHTML = '';
+            tasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task';
+                taskElement.dataset.id = task.id;
+                
+                taskElement.innerHTML = `
+                    <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''}>
+                    <div class="task-content">
+                        <div class="task-title editable" contenteditable="true">${task.title}</div>
+                        <div class="task-description editable" contenteditable="true">${task.description}</div>
+                        <div class="task-meta">
+                            <span>Due: <span class="editable" contenteditable="true">${task.dueDate}</span></span>
+                            <span>Assigned to: <span class="editable" contenteditable="true">${task.assignedTo}</span></span>
+                        </div>
+                    </div>
+                    <button class="danger delete-task">Delete</button>
+                `;
+                
+                taskList.appendChild(taskElement);
+            });
+            
+            // Add event listeners to new elements
+            addTaskEventListeners();
+        }
+        
+        // Add event listeners to task elements
+        function addTaskEventListeners() {
+            // Checkbox toggle
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const taskId = parseInt(this.closest('.task').dataset.id);
+                    const task = tasks.find(t => t.id === taskId);
+                    task.completed = this.checked;
+                });
+            });
+            
+            // Delete task
+            document.querySelectorAll('.delete-task').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const taskId = parseInt(this.closest('.task').dataset.id);
+                    tasks = tasks.filter(t => t.id !== taskId);
+                    renderTasks();
+                });
+            });
+            
+            // Edit task fields
+            document.querySelectorAll('.editable').forEach(field => {
+                field.addEventListener('blur', function() {
+                    const taskId = parseInt(this.closest('.task').dataset.id);
+                    const task = tasks.find(t => t.id === taskId);
+                    
+                    if (this.classList.contains('task-title')) {
+                        task.title = this.textContent;
+                    } else if (this.classList.contains('task-description')) {
+                        task.description = this.textContent;
+                    } else if (this.parentElement.textContent.includes('Due:')) {
+                        task.dueDate = this.textContent;
+                    } else if (this.parentElement.textContent.includes('Assigned to:')) {
+                        task.assignedTo = this.textContent;
+                    }
+                });
+            });
+        }
+        
+        // Add new task
+        addTaskBtn.addEventListener('click', function() {
+            if (newTaskTitle.value.trim() === '') return;
+            
+            const newTask = {
+                id: tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1,
+                title: newTaskTitle.value,
+                description: '',
+                dueDate: '',
+                assignedTo: '',
+                completed: false
+            };
+            
+            tasks.push(newTask);
+            newTaskTitle.value = '';
+            renderTasks();
+        });
+        
+        // Allow adding task with Enter key
+        newTaskTitle.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTaskBtn.click();
+            }
+        });
+        
+        // Lunch order functionality
+        document.getElementById('finalize-order').addEventListener('click', function() {
+            alert('Lunch order has been finalized and sent!');
+        });
+        
+        document.getElementById('reset-orders').addEventListener('click', function() {
+            if(confirm('Are you sure you want to reset lunch orders for a new day?')) {
+                document.getElementById('lunch-orders').value = '';
+                alert('Lunch orders have been reset for a new day!');
+            }
+        });
+        
+        // Update current date
+        const currentDate = new Date();
+        document.getElementById('current-date').textContent = currentDate.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+        
+        // Initial render
+        renderTasks();
+    </script>
+</body>
+</html>
